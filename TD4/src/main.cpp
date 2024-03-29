@@ -4,6 +4,43 @@
 #include <iostream>
 #include <algorithm>
 #include <numeric>
+#include <sstream>
+#include <iomanip>
+
+int firstWord(std::string& str)
+{
+    char space = ' ';
+    std::string::iterator pos;
+    int nombreLettres{0};
+
+    pos = std::find(str.begin(), str.end(), space);
+
+    for (auto it = str.begin(); it != pos; ++it)
+    {
+        nombreLettres++;
+    }
+
+    return nombreLettres;
+}
+
+std::vector<std::string> split_string(std::string& str)
+{
+    char space = ' ';
+    std::string token;
+
+    std::vector<std::string> split;
+
+    int i{0};
+    while((i=str.find(space)) != std::string::npos)
+    {
+        token = str.substr(0, i);
+        split.push_back(token);
+        str.erase(0, i+1);
+    }
+    
+    split.push_back(str);
+    return split;
+}
 
 int main()
 {
@@ -64,4 +101,19 @@ int main()
     }
 
     std::cout << "La somme fait : " << std::accumulate(vec.begin(), vec.end(), sum);
+
+    // Ex 2
+
+    std::string str = "pen pineapple apple pen";
+
+    std::cout << "\nle premier mot de " << std::quoted(str) << " a " << firstWord(str) << " lettres.\n";
+
+    std::vector<std::string> split = split_string(str);
+
+    std::cout << "La chaine de caracteres splitee : \n"; 
+
+    for (auto it = split.begin(); it != split.end(); ++it)
+    {
+        std::cout << *it << "\n";
+    }
 }
