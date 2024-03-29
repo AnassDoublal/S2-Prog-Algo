@@ -42,9 +42,20 @@ std::vector<std::string> split_string(std::string& str)
     return split;
 }
 
+bool isPalindrome(std::string& str)
+{
+    if(std::equal(str.begin(), str.end(), str.rbegin()))
+        return true;
+
+    return false;
+}
+
 int main()
 {
     srand(time(NULL));
+
+    std::cout << "--- Ex 1 ---\n";
+
     std::vector<int> vec;
     std::vector<int>::iterator pos;
 
@@ -104,9 +115,11 @@ int main()
 
     // Ex 2
 
+    std::cout << "\n--- Ex 2 ---\n";
+
     std::string str = "pen pineapple apple pen";
 
-    std::cout << "\nle premier mot de " << std::quoted(str) << " a " << firstWord(str) << " lettres.\n";
+    std::cout << "Le premier mot de " << std::quoted(str) << " a " << firstWord(str) << " lettres.\n";
 
     std::vector<std::string> split = split_string(str);
 
@@ -116,4 +129,15 @@ int main()
     {
         std::cout << *it << "\n";
     }
+
+    // Ex 3
+
+    std::cout << "--- Ex 3 ---\n";
+
+    std::string pal = "ressasser";
+
+    if(isPalindrome(pal))
+        std::cout << std::quoted(pal) << " est un palindrome !";
+    else
+        std::cout << std::quoted(pal) << " n'est pas un palindrome.";
 }
