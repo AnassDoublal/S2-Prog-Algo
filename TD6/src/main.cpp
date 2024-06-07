@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <node.hpp>
+#include <smartNode.hpp>
 
 int main()
 {
@@ -23,4 +24,21 @@ int main()
     std::cout << "Hauteur de l'arbre: " << root->height() << "\n";
 
     delete_tree(root);
+
+    // Smart pointers
+
+    std::unique_ptr<SmartNode> root1 = create_smart_node(5);
+    root1->insert(3);
+    root1->insert(7);
+    root1->insert(2);
+    root1->insert(4);
+    root1->insert(6);
+    root1->insert(8);
+    root1->insert(1);
+    root1->insert(9);
+    root1->insert(0);
+
+    std::cout << "Ordre infixe : ";
+    root1->display_infixe(root1);
+    std::cout << "\n";
 }
