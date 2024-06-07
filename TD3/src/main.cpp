@@ -5,10 +5,11 @@
 #include <iostream>
 #include <cctype>
 #include <stack>
+#include <math.h>
 
 bool is_floating(std::string const& s);
 
-enum class Operator { ADD, SUB, MUL, DIV, OPEN_PAREN, CLOSE_PAREN};
+enum class Operator { ADD, SUB, MUL, DIV, POW, OPEN_PAREN, CLOSE_PAREN};
 enum class TokenType { OPERATOR, OPERAND };
 struct Token {
   TokenType type;
@@ -56,6 +57,13 @@ std::vector<Token> tokenize(std::vector<std::string> const& words)
                 tokens.push_back(make_token(Operator::MUL));
             else if(words[i] == "/")
                 tokens.push_back(make_token(Operator::DIV));
+            else if (words[i] == "^") {
+                tokens.push_back(make_token(Operator::POW));
+            } else if (words[i] == "(") {
+                tokens.push_back(make_token(Operator::OPEN_PAREN));
+            } else if (words[i] == ")") {
+                tokens.push_back(make_token(Operator::CLOSE_PAREN));
+            }
     }
 
     return tokens;
@@ -97,6 +105,9 @@ float npi_evaluate(std::vector<Token> const& tokens)
             case Operator::DIV:
                 result = leftOperand / rightOperand;
                 break;
+            case Operator::POW:
+                    result = std::pow(leftOperand, rightOperand);
+                    break;
             default:
                 break;
             }
@@ -161,6 +172,61 @@ float npi_evaluate(std::vector<std::string> const& tokens)
     return stack.top();
 }
 
+size_t operator_precedence(Operator const op) {
+    switch (op) {
+        case Operator::ADD:
+        case Operator::SUB:
+            return 1;
+        case Operator::MUL:
+        case Operator::DIV:
+            return 2;
+        case Operator::POW:
+            return 3;
+        case Operator::OPEN_PAREN:
+        case Operator::CLOSE_PAREN:
+            return 0;
+        default:
+            return 0;
+    }
+}
+
+std::vector<Token> infix_to_npi_tokens(std::string const& expression) {
+    std::vector<std::string> infix_tokens = split_string(expression);
+    std::vector<Token> tokens = tokenize(infix_tokens);
+    std::vector<Token> output;
+    std::stack<Token> operators;
+
+    for (const auto& token : tokens) {
+        if (token.type == TokenType::OPERAND) {
+            output.push_back(token);
+        } else if (token.op == Operator::OPEN_PAREN) {
+            operators.push(token);
+        } else if (token.op == Operator::CLOSE_PAREN) {
+            while (!operators.empty() && operators.top().op != Operator::OPEN_PAREN) {
+                output.push_back(operators.top());
+                operators.pop();
+            }
+            if (!operators.empty() && operators.top().op == Operator::OPEN_PAREN) {
+                operators.pop();
+            }
+        } else {
+            while (!operators.empty() &&
+                   operator_precedence(operators.top().op) >= operator_precedence(token.op)) {
+                output.push_back(operators.top());
+                operators.pop();
+            }
+            operators.push(token);
+        }
+    }
+
+     while (!operators.empty()) {
+        output.push_back(operators.top());
+        operators.pop();
+    }
+
+    return output;
+}
+
 int main()
 {
     std::string NPI_val;
@@ -175,5 +241,18 @@ int main()
 
     float res = npi_evaluate(tokenized);
 
-    std::cout << "\n" << res;
+    std::cout << "\n" << res << "\n";
+
+    // Ex 3
+
+    std::string infix_expression;
+
+    std::cout << "Entrer une expression en notation infixe (inclure des espaces) : ";
+    std::getline(std::cin, infix_expression);
+
+    std::vector<Token> npi_tokens = infix_to_npi_tokens(infix_expression);
+
+    float result = npi_evaluate(npi_tokens);
+
+    std::cout << result << "\n";
 }
