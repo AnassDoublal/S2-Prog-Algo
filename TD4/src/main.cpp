@@ -50,6 +50,18 @@ bool isPalindrome(std::string& str)
     return false;
 }
 
+int sommeCarre(const std::vector<int>& vecteur) {
+    return std::accumulate(vecteur.begin(), vecteur.end(), 0, [](int total, int element) {
+        return total + element * element;
+    });
+}
+
+int produitElementsPairs(const std::vector<int>& vecteur) {
+    return std::accumulate(vecteur.begin(), vecteur.end(), 1, [](int produit, int element) {
+        return (element % 2 == 0) ? produit * element : produit;
+    });
+}
+
 int main()
 {
     srand(time(NULL));
@@ -137,7 +149,18 @@ int main()
     std::string pal = "ressasser";
 
     if(isPalindrome(pal))
-        std::cout << std::quoted(pal) << " est un palindrome !";
+        std::cout << std::quoted(pal) << " est un palindrome !\n";
     else
-        std::cout << std::quoted(pal) << " n'est pas un palindrome.";
+        std::cout << std::quoted(pal) << " n'est pas un palindrome.\n";
+
+    // Pour aller plus loin
+
+    std::cout << "--- Pour aller plus loin ---\n";
+
+    std::vector<int> vecteur1 = {1, 2, 3, 4, 5};
+    std::vector<int> vecteur2 = {2, 3, 4, 5, 6};
+
+    std::cout << "Somme du carre des elements de vecteur1 : " << sommeCarre(vecteur1) << "\n";
+
+    std::cout << "Produit des elements pairs de vecteur2 : " << produitElementsPairs(vecteur2) << "\n";
 }
