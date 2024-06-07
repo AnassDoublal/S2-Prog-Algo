@@ -58,7 +58,7 @@ void Node::display_infixe() const {
 
 std::vector<Node const*> Node::prefixe() const
 {
-   std::vector<Node const*> result;
+    std::vector<Node const*> result;
     result.push_back(this);
     if (left) {
         auto leftPrefix = left->prefixe();
@@ -69,6 +69,37 @@ std::vector<Node const*> Node::prefixe() const
         result.insert(result.end(), rightPrefix.begin(), rightPrefix.end());
     }
     return result;
+}
+
+std::vector<Node const*> Node::postfixe() const
+{
+    std::vector<Node const*> result;
+    if (left) {
+        auto leftPostfix = left->postfixe();
+        result.insert(result.end(), leftPostfix.begin(), leftPostfix.end());
+    }
+    if (right) {
+        auto rightPostfix = right->postfixe();
+        result.insert(result.end(), rightPostfix.begin(), rightPostfix.end());
+    }
+    result.push_back(this);
+    return result;
+}
+
+int Node::min() const {
+    const Node* current = this;
+    while (current && current->left) {
+        current = current->left;
+    }
+    return current ? current->value : -1; // Retourne -1 si la node est nulle (ce qui ne devrait pas arriver)
+}
+
+int Node::max() const {
+    const Node* current = this;
+    while (current && current->right) {
+        current = current->right;
+    }
+    return current ? current->value : -1; // Retourne -1 si la node est nulle (ce qui ne devrait pas arriver)
 }
 
 Node*& most_left(Node*& node)

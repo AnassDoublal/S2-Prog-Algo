@@ -12,6 +12,9 @@ struct Node {
     void delete_childs();
     void display_infixe() const;
     std::vector<Node const*> prefixe() const;
+    std::vector<Node const*> postfixe() const;
+    int min() const;
+    int max() const;
 };
 
 Node* create_node(int value);

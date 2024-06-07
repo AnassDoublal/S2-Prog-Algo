@@ -21,11 +21,16 @@ int main()
     root->display_infixe();
     std::cout << "\n";
 
-    std::cout << "Hauteur de l'arbre: " << root->height() << "\n";
+    std::cout << "Hauteur de l'arbre : " << root->height() << "\n";
+
+    std::cout << "Valeur min de l'arbre : " << root->min() << "\n";
+    std::cout << "Valeur max de l'arbre : " << root->max() << "\n";
 
     delete_tree(root);
 
     // Smart pointers
+
+    std::cout << "-----SMART POINTERS-----\n";
 
     std::unique_ptr<SmartNode> root1 = create_smart_node(5);
     root1->insert(3);
