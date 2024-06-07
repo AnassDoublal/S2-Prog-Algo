@@ -121,9 +121,30 @@ void printArray(std::vector<int>& vec)
 {
     for (int i = 0; i < vec.size(); i++)
     {
-        std::cout << vec[i] << ", ";
+        std::cout << vec[i];
+
+        if(i < vec.size()-1)
+            std::cout << ", ";
     }
     std::cout << "\n";
+}
+
+// Pour aller plus loin
+
+void counting_sort(std::vector<int> &vec, int const max) {
+    std::vector<int> count(max+1, 0);
+    
+    for(int num : vec) {
+        count[num]++;
+    }
+    
+    int index = 0;
+    for(int i = 0; i <= max; ++i) {
+        while(count[i] > 0) {
+            vec[index++] = i;
+            count[i]--;
+        }
+    }
 }
 
 int main()
@@ -159,10 +180,20 @@ int main()
     std::vector<int> array5 {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     std::cout << "Index of target : " << search(array1, 8) << "\n";
-    std::cout << "Index of target : " << search(array2, 15) << "\n";
+    std::cout << "Index of target : " << search(array2, 15) << "\n"; 
     std::cout << "Index of target : " << search(array3, 16) << "\n";
     std::cout << "Index of target : " << search(array4, 6) << "\n";
     std::cout << "Index of target : " << search(array5, 10) << "\n";
+
+    // Pour aller plus loin
+
+    std::vector<int> vec = {4, 2, 2, 8, 3, 3, 1};
+    int max = 8;
+
+    counting_sort(vec, max);
+
+    std::cout << "Tableau trie avec Counting Sort : ";
+    printArray(vec);
     
     return 0;
 }
